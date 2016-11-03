@@ -21,6 +21,7 @@ ${demo.css}
 
 var temp,temp_int;
 var humid,humid_int;
+var light,light_int;
 
 $(function () {
     
@@ -51,6 +52,12 @@ $(function () {
                             var x1 = (new Date()).getTime(); // current time
                                 y1 = humid_int;
                             series1.addPoint([x1, y1], true, true);
+                        }, 3500);
+                        var series2 = this.series[2];
+                        setInterval(function () {
+                            var x2 = (new Date()).getTime(); // current time
+                                y2 = light_int;
+                            series2.addPoint([x2, y2], true, true);
                         }, 3500);
                     }
                 }
@@ -86,7 +93,7 @@ $(function () {
                 enabled: false
             },
             series: [{
-                name: 'Data',
+                name: 'Temp',
                 data: (function () {
                     // generate an array of random data
                     var data = [],
@@ -104,7 +111,7 @@ $(function () {
                 }())
             },
             {
-                name: 'Data 2',
+                name: 'Humid',
                 data: (function () {
                     // generate an array of random data
                     var data = [],
@@ -113,7 +120,25 @@ $(function () {
 
                     for (i = -5; i <= 0; i += 1) {
                         data.push({
-                            x: time,
+                            x: time + i * 1000,
+                            y: 0
+                        });
+                    }
+                    //document.getElementById("data_2").innerHTML=data;
+                    return data;
+                }())
+            },
+            {
+                name: 'Light',
+                data: (function () {
+                    // generate an array of random data
+                    var data = [],
+                        time = (new Date()).getTime(),
+                        i;
+
+                    for (i = -5; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
                             y: 0
                         });
                     }
@@ -152,9 +177,10 @@ $(function () {
         temp_int = parseFloat(temp);
         humid =split_msg[1];
         humid_int = parseFloat(humid);
-
-        //document.getElementById("temp_data").innerHTML = a;
-       // document.getElementById("humid_data").innerHTML = b;
+        light = split_msg[2]
+        light_int = parseFloat(light);
+        document.getElementById("data_2").innerHTML = light_int;
+  
     });
 
     microgear.on('connected', function() {
@@ -206,6 +232,7 @@ $(function () {
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <div id="data" class="w3-center w3-animate-fading"></div>
+<div id="data_2">____</div>
 
 <script>
 // Script to open and close sidenav
